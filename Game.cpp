@@ -3,6 +3,7 @@
 //
 
 #include "Game.h"
+#include <iostream>
 #include "SFML/Graphics.hpp"
 
 
@@ -15,12 +16,15 @@ gameSettings Game::getSettings() {
 }
 
 void Game::addPlayer(Head *player, sf::Keyboard::Key left, sf::Keyboard::Key right) {
+    player->setParent(this);
     for(auto other: players){
         player->addEnemy(other);
         other->addEnemy(player);
     }
     EventAgent agent(player, player->getEnemies(), left, right);
     eventListeners.push_back(agent);
+
+    players.push_back(player);
 
 }
 
@@ -30,7 +34,7 @@ void Game::handleEvents() {
         if(event.type == sf::Event::Closed)
             window->close();
 
-        for(auto listener: eventListeners){
+        for(auto &listener: eventListeners){
             listener.update(event);
         }
     }
@@ -60,5 +64,12 @@ void Game::drawFrame() {
         window->draw(player->getShape());
         window->draw(player->getHeadShape());
     }
+//    sf::RectangleShape mapRect;
+//    mapRect.setPosition(0, 0);
+//    mapRect.setSize(sf::Vector2f(settings.width, settings.height));
+//    mapRect.setFillColor(sf::Color(0, 0, 100, 100));
+//
+//    window->draw(mapRect);
+
     window->display();
 }

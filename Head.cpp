@@ -94,6 +94,11 @@ sf::VertexArray Head::wide_head() {
     result[0].color = color;
     result[1].color = color;
 
+    if(ghost){
+        result[0].color.a=0;
+        result[1].color.a=0;
+    }
+
     return result;
 }
 
@@ -180,11 +185,6 @@ bool Head::isGhost() const {
 
 void Head::setGhost(bool ghost) {
     Head::ghost = ghost;
-    if(ghost){
-        color.a = 0;
-    } else{
-        color.a = 255;
-    }
 }
 
 const sf::Color &Head::getColor() const {

@@ -17,7 +17,7 @@ protected:
 public:
     Agent(Head * player, std::vector <Head *> enemies);
     void update();
-    int decision();
+    virtual int decision();
 
     void applyDecision();
 

@@ -3,6 +3,7 @@
 //
 
 #include "Agent.h"
+#include <iostream>
 #include "../Game.h"
 
 Agent::Agent(Head * player, std::vector<Head *> enemies) {
@@ -15,5 +16,6 @@ int Agent::decision() {
 }
 
 void Agent::applyDecision() {
-    this->player->turn(this->player->getParent()->getSettings().radiansPerTick * this->decision());
+    gameSettings currentSettings = this->player->getParent()->getSettings();
+    this->player->turn(currentSettings.radiansPerTick * this->decision());
 }
