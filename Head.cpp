@@ -19,6 +19,7 @@ Head::Head(float startX, float startY,  int startWidth, float startSpeed, double
 
     lines.setPrimitiveType(sf::TrianglesStrip);
     sf::VertexArray currentHead = wide_head();
+    // init the first line
     lines.append(currentHead[0]);
     lines.append(currentHead[1]);
 }
@@ -32,6 +33,7 @@ sf::VertexArray Head::getShape() {
 }
 
 sf::CircleShape Head::getHeadShape() {
+    // returns CircleShape representing the head
     sf::CircleShape result;
     result.setFillColor(sf::Color::Yellow);
     result.setPosition(position.x - width, position.y - width);
@@ -73,18 +75,22 @@ std::vector<sf::Color> Head::intersects(sf::Image &image) {
     std::vector<sf::Color> result;
 
     for(double a=angle - M_PI/2.2; a < angle + M_PI/2.2; a += M_PI/SWEEP_RESOLUTION){
+        // x and y lie on semicircle in front of head
         int x = lround(position.x + cos(a) * width);
         int y = lround(position.y + sin(a) * width);
 
         sf::Color localColor = image.getPixel(x, y);
         if(localColor != parent->getSettings().backgroundColor){
             result.push_back(localColor);
+            // because of antialiasing this will contain many false positives
+            // TODO dosomething about it
         }
     }
     return result;
 }
 
 sf::VertexArray Head::wide_head() {
+    // returns two points at the and of 'snake' this could be simple vector, but... idk
     sf::VertexArray result(sf::LinesStrip, 2);
     result[0].position.x = cos(angle - M_PI/2) * width + position.x;
     result[0].position.y = sin(angle - M_PI/2) * width + position.y;
@@ -94,6 +100,7 @@ sf::VertexArray Head::wide_head() {
     result[0].color = color;
     result[1].color = color;
 
+    // make it transparent in ghost
     if(ghost){
         result[0].color.a=0;
         result[1].color.a=0;
@@ -107,9 +114,11 @@ void Head::turn(double angle) {
 }
 
 void Head::update(sf::Image &image) {
+    // don't bother if player is dead
     if(!alive)
         return ;
 
+    // movement
     float delta_x = cos(angle) * speed;
     float delta_y = sin(angle) * speed;
 
@@ -122,13 +131,16 @@ void Head::update(sf::Image &image) {
         return;
     }
 
+    // add movement to lines to be drawn
     sf::VertexArray currentHead = wide_head();
     lines.append(currentHead[0]);
     lines.append(currentHead[1]);
 
+    // manage collisions only if not in ghost
     if(!ghost) {
         for (auto enemy: enemies) {
             float dist = sqrtf(powf(position.x - enemy->position.x, 2) + powf(position.y - enemy->position.y, 2));
+            // if distance is smaller than the sum of the radii, there is collision
             if (dist < width + enemy->width)
                 alive = false;
         }
@@ -137,12 +149,14 @@ void Head::update(sf::Image &image) {
         std::vector <sf::Color> enemyColors = getEnemyColors();
 
         for(auto collision: collisions){
+            // if color of collision belongs to enemy or player, die
             if(std::find(enemyColors.begin(), enemyColors.end(), collision) != enemyColors.end())
                 alive = false;
             if(collision == color)
                 alive = false;
         }
     }
+    // handle ghost
     if(ghostTimer == 0){
         if(ghost){
             setGhost(false);
@@ -155,28 +169,6 @@ void Head::update(sf::Image &image) {
     }
 
     ghostTimer--;
-
-//    sf::Vector2f rectPosition = currentHead[1].position;
-//    sf::Vector2f rectSize(currentHead[0].position - currentHead[1].position);
-//    sf::FloatRect newRect(rectPosition, rectSize);
-
-//    sf::FloatRect lastRect = hitboxes[hitboxes.size() - 1];
-//    if(fabs(lastRect.top - newRect.top) > fabs(lastRect.height) ||
-//       fabs(lastRect.left - newRect.left) > fabs(lastRect.width)) {
-
-
-
-//        hitboxes.push_back(newRect);
-//    }
-
-//    sf::Color background(0, 0, 0);
-//    sf::Color testColor = image.getPixel(int(position.x+0.5), int(position.y + 0.5));
-//    bool colision = image.getPixel(int(position.x+0.5), int(position.y + 0.5)) != background;
-//    bool outOfBounds = position.x < 0 || position.y < 0 || position.x > 400 || position.y > 400;
-//    if(colision || outOfBounds){
-//        alive = false;
-//        std::cout << "Dead";
-//    }
 }
 
 bool Head::isGhost() const {

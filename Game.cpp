@@ -46,6 +46,7 @@ void Game::handleEvents() {
 
 void Game::updateLogic() {
 
+    //capture image of current game state. Used for collision detection
     sf::Vector2u windowSize = window->getSize();
     sf::Texture texture;
     texture.create(windowSize.x, windowSize.y);
