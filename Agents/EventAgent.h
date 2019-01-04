@@ -7,6 +7,25 @@
 #ifndef HELLOSFML_EVENTAGENT_H
 #define HELLOSFML_EVENTAGENT_H
 
+class EventWrapper{
+    struct joystickKey{
+        int joystickNum;
+        int keyNum;
+    };
+private:
+    union{
+        sf::Keyboard::Key keyLeft;
+        joystickKey joystickLeft;
+    };
+    bool leftKeyboardUsed;
+    union{
+        sf::Keyboard::Key keyLeft;
+        joystickKey joystickLeft;
+    };
+    bool rightKeyboardUsed;
+
+};
+
 
 class EventAgent: public Agent {
 private:
