@@ -1,14 +1,16 @@
 //
 // Created by brych on 31.12.18.
 //
-#include <SFML/Graphics.hpp>
-#include "Agents/EventAgent.h"
-#include "Head.h"
-#include <vector>
 
 #ifndef HELLOSFML_GAME_H
 #define HELLOSFML_GAME_H
 
+#include <SFML/Graphics.hpp>
+#include "Agents/EventAgent.h"
+#include "Head.h"
+#include "Effect.h"
+#include "GameEffects.h"
+#include <vector>
 
 struct gameSettings{
     int width;
@@ -37,6 +39,7 @@ public:
     gameSettings getSettings();
     Game(gameSettings settings, sf::RenderWindow * window);
     void addPlayer(Head * player, sf::Keyboard::Key left, sf::Keyboard::Key right);
+    void addPlayer(Head * player, sf::Event::JoystickButtonEvent left, sf::Event::JoystickButtonEvent right);
 
     void handleEvents();
     void updateLogic();

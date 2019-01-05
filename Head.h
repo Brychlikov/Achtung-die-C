@@ -9,6 +9,7 @@
 #include <vector>
 
 class Game;
+class Effect;
 
 class Head{
 private:
@@ -20,12 +21,14 @@ private:
     // current properties
     int width;
     float speed;
+private:
     double angle;
     bool ghost = false; // if true, doesn't leave trail and is immune to collisions
     int ghostTimer = 60;  // how many frames does ghost last
     bool alive = true;
 
     std::vector <Head *> enemies;  // pointers to all enemies. Used for collision detection
+    std::vector <Effect *> effects;
     Game* parent;
 
     sf::VertexArray wide_head();  // returns array representing the line at the and of 'snake'
@@ -46,9 +49,12 @@ public:
 
     void update(sf::Image &image);
     void addEnemy(Head * enemy);
+    void addEffect(Effect  * effect);
     const sf::Color &getColor() const;
 
     void setColor(const sf::Color &color);
+    float getSpeed() const;
+    void setSpeed(float speed);
     bool isGhost() const;
 
     void setGhost(bool ghost);

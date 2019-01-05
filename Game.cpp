@@ -28,11 +28,34 @@ void Game::addPlayer(Head *player, sf::Keyboard::Key left, sf::Keyboard::Key rig
 
 }
 
+void Game::addPlayer(Head *player, sf::Event::JoystickButtonEvent left, sf::Event::JoystickButtonEvent right) {
+    // TODO make it into template
+    player->setParent(this);
+    for(auto other: players){
+        player->addEnemy(other);
+        other->addEnemy(player);
+    }
+    EventAgent agent(player, player->getEnemies(), left, right);
+    eventListeners.push_back(agent);
+
+    players.push_back(player);
+
+}
+
 void Game::handleEvents() {
     sf::Event event;
     while(window->pollEvent(event)){
+        if (event.type == sf::Event::JoystickButtonPressed)
+            std::cout << "ID: " << event.joystickButton.joystickId << "BTN:  " << event.joystickButton.button << std::endl;
         if(event.type == sf::Event::Closed)
             window->close();
+
+        if(event.type == sf::Event::KeyPressed){
+            if (event.key.code == sf::Keyboard::Space){
+                auto test = new SpeedEffect(players[0], 3, 5);
+                players[0]->addEffect(test);
+            }
+        }
 
         for(auto &listener: eventListeners){
             listener.update(event);

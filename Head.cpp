@@ -3,6 +3,7 @@
 
 #include "Head.h"
 #include "Game.h"
+#include "Effect.h"
 #include <cmath>
 #include <iostream>
 #include <algorithm>
@@ -136,6 +137,17 @@ void Head::update(sf::Image &image) {
     lines.append(currentHead[0]);
     lines.append(currentHead[1]);
 
+    //apply effects
+    for(auto it=effects.begin(); it != effects.end(); ++it){
+        if((*it)->update()) {
+            // I can't do pointers
+            // memory leaks are here
+//            delete *it;
+            effects.erase(it);
+            --it;
+        }
+    }
+
     // manage collisions only if not in ghost
     if(!ghost) {
         for (auto enemy: enemies) {
@@ -185,6 +197,18 @@ const sf::Color &Head::getColor() const {
 
 void Head::setColor(const sf::Color &color) {
     Head::color = color;
+}
+
+float Head::getSpeed() const {
+    return speed;
+}
+
+void Head::setSpeed(float speed) {
+    Head::speed = speed;
+}
+
+void Head::addEffect(Effect * effect) {
+    effects.push_back(effect);
 }
 
 
