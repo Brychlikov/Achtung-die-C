@@ -8,34 +8,43 @@
 #define HELLOSFML_EVENTAGENT_H
 
 class EventWrapper{
-    struct joystickKey{
-        int joystickNum;
-        int keyNum;
-    };
 private:
+    bool keyboardUsed;
     union{
         sf::Keyboard::Key keyLeft;
-        joystickKey joystickLeft;
+        sf::Event::JoystickButtonEvent padRight;
     };
-    bool leftKeyboardUsed;
     union{
-        sf::Keyboard::Key keyLeft;
-        joystickKey joystickLeft;
+        sf::Keyboard::Key keyRight;
+        sf::Event::JoystickButtonEvent padLeft;
     };
-    bool rightKeyboardUsed;
+
+public:
+    EventWrapper(sf::Keyboard::Key left, sf::Keyboard::Key right);
+    EventWrapper(sf::Event::JoystickButtonEvent left, sf::Event::JoystickButtonEvent right);
+
+    int direction(sf::Event event);
 
 };
 
 
 class EventAgent: public Agent {
 private:
-    sf::Keyboard::Key leftEvent;
-    sf::Keyboard::Key rightEvent;
+    bool keyboardUsed;
+    union {
+        sf::Keyboard::Key leftKeyboard;
+        sf::Event::JoystickButtonEvent leftGamepad;
+    };
+    union {
+        sf::Keyboard::Key rightKeyboard;
+        sf::Event::JoystickButtonEvent rightGamepad;
+    };
 
     bool goingRight = false;
     bool goingLeft = false;
 public:
     EventAgent(Head * player, std::vector <Head *> enemies, sf::Keyboard::Key left, sf::Keyboard::Key right);
+    EventAgent(Head * player, std::vector <Head *> enemies, sf::Event::JoystickButtonEvent left, sf::Event::JoystickButtonEvent right);
     bool isGoingRight();
 
     void setGoingRight(bool goingRight);
