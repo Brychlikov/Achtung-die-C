@@ -13,6 +13,16 @@ SpeedEffect::SpeedEffect(Head * target, float length, float speed_delta): Effect
     start();
 }
 
+SpeedEffect::SpeedEffect(float length, float speed_delta): Effect(length){
+    this->speed_delta = speed_delta;
+}
+
+void SpeedEffect::setTarget(Head *target) {
+    clock.restart();
+    this->target = target;
+    start();
+}
+
 void SpeedEffect::start() {
     target->setSpeed(target->getSpeed() + speed_delta);
 }
@@ -22,7 +32,8 @@ void SpeedEffect::end() {
 }
 
 bool SpeedEffect::update() {
-    if(clock.getElapsedTime() >= length){
+    sf::Time time = clock.getElapsedTime();
+    if(time >= length){
         end();
         return true;
     }

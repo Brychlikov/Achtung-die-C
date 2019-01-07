@@ -11,6 +11,7 @@
 #include "Effect.h"
 #include "GameEffects.h"
 #include <vector>
+#include "PowerUp.h"
 
 struct gameSettings{
     int width;
@@ -30,16 +31,22 @@ class Game {
 private:
     float speed;
     std::vector <Head *> players;
+    std::vector <PowerUp *> powerUps;
     std::vector <EventAgent> eventListeners;
     gameSettings settings;
 
     sf::RenderWindow * window;
+
+    void handlePowerUps();
 
 public:
     gameSettings getSettings();
     Game(gameSettings settings, sf::RenderWindow * window);
     void addPlayer(Head * player, sf::Keyboard::Key left, sf::Keyboard::Key right);
     void addPlayer(Head * player, sf::Event::JoystickButtonEvent left, sf::Event::JoystickButtonEvent right);
+
+    void addPowerUp(Effect &effect, sf::Vector2f position);
+    void addPowerUp(Effect &effect, sf::Vector2f position, sf::Texture texture);
 
     void handleEvents();
     void updateLogic();

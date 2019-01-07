@@ -211,4 +211,12 @@ void Head::addEffect(Effect * effect) {
     effects.push_back(effect);
 }
 
+int Head::getWidth() const {
+    return width;
+}
+
+void Head::setWidth(int width) {
+    Head::width = width;
+}
+
 

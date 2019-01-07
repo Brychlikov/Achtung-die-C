@@ -19,6 +19,9 @@ protected:
 public:
     Effect(Head * target, sf::Time length);
     Effect(Head * target, float length);
+    Effect(float length);
+
+    virtual void setTarget(Head * target);
 
     virtual bool update();
 };

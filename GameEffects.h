@@ -18,6 +18,8 @@ protected:
 public:
     SpeedEffect(Head * target, sf::Time length, float speed_delta);
     SpeedEffect(Head * target, float length, float speed_delta);
+    SpeedEffect(float length, float speed_delta);
+    void setTarget(Head * target);
     bool update();
 };
 

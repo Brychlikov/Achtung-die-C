@@ -1,11 +1,15 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Window.hpp>
+#include <SFML/System.hpp>
 #include <vector>
 #include "Agents/EventAgent.h"
 #include "Game.h"
 #include <cmath>
 #include <iostream>
 #include <chrono>
+#include "PowerUp.h"
+#include "Effect.h"
+#include "GameEffects.h"
 
 #include <memory>
 
@@ -48,8 +52,28 @@ int main() {
     Head player2(600, 600, 5, 3, M_PI);
     player2.setColor(sf::Color::Magenta);
 
+    sf::Event::JoystickButtonEvent padControlSchemeLeft;
+    padControlSchemeLeft.button = 6;
+    padControlSchemeLeft.joystickId = 0;
+    sf::Event::JoystickButtonEvent padControlSchemeRight;
+    padControlSchemeRight.button = 7;
+    padControlSchemeRight.joystickId = 0;
+
     mGame.addPlayer(&player1, sf::Keyboard::Left, sf::Keyboard::Right);
-    mGame.addPlayer(&player2, sf::Keyboard::A, sf::Keyboard::D);
+    mGame.addPlayer(&player2, padControlSchemeLeft, padControlSchemeRight);
+
+    SpeedEffect testEffect = SpeedEffect(5, 3);
+
+    sf::FileInputStream stream;
+    stream.open("Assets/SanicMeme.png");
+
+//    sf::Image sonicimg;
+//    sonicimg.loadFromFile("Assets/SanicMeme.png");
+    sf::Texture sonic;
+    sonic.loadFromStream(stream);
+
+    mGame.addPowerUp(testEffect, sf::Vector2f(400, 400), sonic);
+
 
 
     while (window.isOpen())

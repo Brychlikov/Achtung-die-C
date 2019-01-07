@@ -20,6 +20,12 @@ private:
 
     // current properties
     int width;
+public:
+    int getWidth() const;
+
+    void setWidth(int width);
+
+private:
     float speed;
 private:
     double angle;

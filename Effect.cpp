@@ -15,6 +15,14 @@ Effect::Effect(Head * target, float length) {
     this->target = target;
 }
 
+Effect::Effect(float length) {
+    this->length = sf::seconds(length);
+}
+
+void Effect::setTarget(Head *target) {
+    this->target = target;
+    clock = sf::Clock();
+}
 
 bool Effect::update() {
     if(clock.getElapsedTime() >= length){
