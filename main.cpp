@@ -60,19 +60,22 @@ int main() {
     padControlSchemeRight.joystickId = 0;
 
     mGame.addPlayer(&player1, sf::Keyboard::Left, sf::Keyboard::Right);
-    mGame.addPlayer(&player2, padControlSchemeLeft, padControlSchemeRight);
+    mGame.addPlayer(&player2, sf::Keyboard::A, sf::Keyboard::D);
 
     SpeedEffect testEffect = SpeedEffect(5, 3);
 
-    sf::FileInputStream stream;
-    stream.open("Assets/SanicMeme.png");
 
 //    sf::Image sonicimg;
 //    sonicimg.loadFromFile("Assets/SanicMeme.png");
-    sf::Texture sonic;
-    sonic.loadFromStream(stream);
+    auto sonic = new sf::Texture;
+    if(!sonic->loadFromFile("Assets/SanicMeme.png")){
+        std::cout << "Error loading textrure: ";
+    }
+    sf::Sprite testSprite;
+    testSprite.setTexture(*sonic);
+    testSprite.setPosition(100, 100);
 
-    mGame.addPowerUp(testEffect, sf::Vector2f(400, 400), sonic);
+    mGame.addPowerUp(testEffect, sf::Vector2f(400, 400), *sonic);
 
 
 
@@ -81,6 +84,7 @@ int main() {
         mGame.handleEvents();
         mGame.updateLogic();
         mGame.drawFrame();
+        window.draw(testSprite);
 
 
     }

@@ -48,7 +48,7 @@ void Game::addPowerUp(Effect &effect, sf::Vector2f position) {
     powerUps.push_back(temp);
 }
 
-void Game::addPowerUp(Effect &effect, sf::Vector2f position, sf::Texture texture) {
+void Game::addPowerUp(Effect &effect, sf::Vector2f position, sf::Texture &texture) {
     auto temp = new PowerUp(effect, position, texture);
     powerUps.push_back(temp);
 }
@@ -65,15 +65,19 @@ void Game::handlePowerUps() {
             if(pickup->isPickedUp())
                 continue;
             float dist = distance(pickup->getPosition(), player->getPosition());
-            std::cout << "Dist: " << dist << std::endl;
             if(dist < player->getWidth() + pickup->getRadius()){
-                std::cout << "!!!!!!!!!!!!!!!!picked up!!!!!!!!!!!!!!!!" << std::endl;
                 pickup->pick_up(player);
                 pickup->setPickedUp(true);
             }
         }
     }
 
+    for(auto it=powerUps.begin(); it != powerUps.end(); ++it){
+        if((*it)->isPickedUp()){
+            powerUps.erase(it);
+            --it;
+        }
+    }
 
 }
 
@@ -84,13 +88,6 @@ void Game::handleEvents() {
             std::cout << "ID: " << event.joystickButton.joystickId << "BTN:  " << event.joystickButton.button << std::endl;
         if(event.type == sf::Event::Closed)
             window->close();
-
-        if(event.type == sf::Event::KeyPressed){
-            if (event.key.code == sf::Keyboard::Space){
-                auto test = new SpeedEffect(players[0], 3, 5);
-                players[0]->addEffect(test);
-            }
-        }
 
         for(auto &listener: eventListeners){
             listener.update(event);

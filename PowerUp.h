@@ -16,10 +16,11 @@ public:
     const sf::Vector2f &getPosition() const;
 
 private:
+    bool usingTexture;
     sf::CircleShape shape;
     sf::Sprite sprite;
 public:
-    const sf::CircleShape &getShape() const;
+    const sf::Drawable &getShape() const;
 
 private:
 
@@ -38,7 +39,7 @@ public:
 
 public:
     PowerUp(Effect &effect, sf::Vector2f position);
-    PowerUp(Effect &effect, sf::Vector2f position, sf::Texture texture);
+    PowerUp(Effect &effect, sf::Vector2f position, sf::Texture &texture);
     void setPosition(sf::Vector2f pos);
     void setRadius(int radius);
 

@@ -8,18 +8,21 @@ PowerUp::PowerUp(Effect &effect, sf::Vector2f position): effect(effect) {
     this ->effect = effect;
     this->position = position;
     shape = sf::CircleShape(radius);
-    shape.setPosition(position);
+    shape.setPosition(position - sf::Vector2f(radius, radius));
     shape.setFillColor(sf::Color::Cyan);
+    usingTexture = false;
 }
 
-PowerUp::PowerUp(Effect &effect, sf::Vector2f position, sf::Texture texture): effect(effect) {
+PowerUp::PowerUp(Effect &effect, sf::Vector2f position, sf::Texture &texture): effect(effect) {
     this->effect = effect;
     this->position = position;
     sf::Sprite temp(texture);
     sf::Vector2u size = texture.getSize();
-    float scale = float(radius) / size.x;
+    float scale = float(radius) / size.x * 2;
     temp.setScale(scale, scale);
-    temp.setPosition(position);
+    temp.setPosition(position - sf::Vector2f(radius, radius));
+    sprite = temp;
+    usingTexture = true;
 }
 
 void PowerUp::setRadius(int radius) {
@@ -51,6 +54,9 @@ const sf::Vector2f &PowerUp::getPosition() const {
     return position;
 }
 
-const sf::CircleShape &PowerUp::getShape() const {
-    return shape;
+const sf::Drawable &PowerUp::getShape() const {
+    if(usingTexture)
+        return sprite;
+    else
+        return shape;
 }

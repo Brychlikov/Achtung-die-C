@@ -46,7 +46,7 @@ public:
     void addPlayer(Head * player, sf::Event::JoystickButtonEvent left, sf::Event::JoystickButtonEvent right);
 
     void addPowerUp(Effect &effect, sf::Vector2f position);
-    void addPowerUp(Effect &effect, sf::Vector2f position, sf::Texture texture);
+    void addPowerUp(Effect &effect, sf::Vector2f position, sf::Texture &texture);
 
     void handleEvents();
     void updateLogic();
